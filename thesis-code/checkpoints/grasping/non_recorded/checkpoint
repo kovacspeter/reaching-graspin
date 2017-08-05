@@ -1,0 +1,2 @@
+model_checkpoint_path: "working_grasp"
+all_model_checkpoint_paths: "working_grasp"

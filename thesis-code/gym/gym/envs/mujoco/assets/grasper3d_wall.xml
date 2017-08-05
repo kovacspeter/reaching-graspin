@@ -1,0 +1,89 @@
+<mujoco model="reacher">
+	<compiler angle="degree" inertiafromgeom="true"/>
+	<default>
+		<joint armature="1" damping="1" limited="true"/>
+		<geom contype="0" friction="1 0.1 0.1" rgba="0.7 0.7 0 1"/>
+        <default class='1'>
+			<geom friction="1 0.005 0.001" rgba=".7 .6 .55 1" contype="1" conaffinity="1"/>
+		</default>
+        <motor ctrllimited="true" ctrlrange="-.5 .5"/>
+	</default>
+	<option gravity="0 0 -9.81" integrator="RK4" timestep="0.01"/>
+	<worldbody>
+		<!-- Arena -->
+		<!--<geom name="tableTop" material="MatGnd" type="plane" pos="0.15 0 0" size="0.4 0.6 0.5" rgba=".6 .6 .5 1" contype="1" conaffinity="1"/>-->
+		<geom conaffinity="1" contype="1" name="ground" pos="0 0 -.2" rgba="0.9 0.9 0.9 1" size="1 1 10" type="plane"/>
+		<geom conaffinity="1" fromto="-.2 -.2 -.21 .2 -.2 -.21" name="sideS" rgba="0.9 0.4 0.6 1" size=".02" type="capsule"/>
+		<geom conaffinity="1" fromto=" .2 -.2 -.21 .2  .2 -.21" name="sideE" rgba="0.9 0.4 0.6 1" size=".02" type="capsule"/>
+		<geom conaffinity="1" fromto="-.2  .2 -.21 .2  .2 -.21" name="sideN" rgba="0.9 0.4 0.6 1" size=".02" type="capsule"/>
+		<geom conaffinity="1" fromto="-.2 -.2 -.21 -.2 .2 -.21" name="sideW" rgba="0.9 0.4 0.6 1" size=".02" type="capsule"/>
+		<!-- Arm -->
+		<geom conaffinity="0" contype="0" fromto="0 0 0 0 0 0.015" name="root" rgba="0.9 0.4 0.6 1" size=".011" type="cylinder"/>
+		<body name="Arm" pos="0 0 0">
+			<geom fromto="0 0 0 0.10 0 0" name="link0" rgba="0.0 0.4 0.6 1" size=".01" type="capsule"/>
+			<!--ROTUJE OKOLO SVOJEJ OSI (pohyb nevidno)-->
+			<!--<joint axis="1 0 0" limited="false" name="joint0" pos="0 0 0" type="hinge"/>-->
+			<!--ROTUJE KOLMO NA PODLAHU -->
+			<joint axis="0 1 0" limited="false" name="joint1" pos="0 0 0" type="hinge"/>
+			<!--ROTUJE ROVNOBEZNE S PODLAHOU-->
+			<joint axis="0 0 1" limited="false" name="joint2" pos="0 0 0" type="hinge"/>
+			<body name="Forearm" pos="0.1 0 0">
+				<geom fromto="0 0 0 0.10 0 0" name="link1" rgba="0.0 0.4 0.6 1" size=".01" type="capsule"/>
+				<joint axis="0 1 0" limited="false" name="joint3" pos="0 0 0" type="hinge"/>
+				<joint axis="0 0 1" limited="false" name="joint4" pos="0 0 0" type="hinge"/>
+				<!--<joint axis="1 0 0" limited="false" name="joint5" pos="0 0 0" type="hinge"/>-->
+
+                <body name="palm" pos="0.11 0 0">
+					<geom contype="0" name="palm" pos="0 0 0" rgba="0.0 0.8 0.6 1" size=".01" type="sphere"/>
+                    <body name="rightclaw" pos="0 -.01 0" >
+						<geom name="rightclaw_it" class="1" type="capsule" fromto="0 0 0.01 .015 -.01 0.01" 	size="0.006" />
+						<geom name="rightclaw_ot" class="1" type="capsule" fromto=".015 -.01 0.01 .035 0 0.01" size="0.006" />
+						<geom name="rightclaw_ib" class="1" type="capsule" fromto="0 0 -0.01 .015 -.01 -0.01" 	size="0.006" />
+						<geom name="rightclaw_ob" class="1" type="capsule" fromto=".015 -.01 -0.01 .035 0 -0.01" size="0.006" />
+						<!--<joint name="rc_close" type="hinge" pos="0 0 0" axis="0 0 1" range="-40 40"/>-->
+						<joint name="rc_close" type="hinge" pos="0 0 0" axis="0 0 1" range="-40 -30"/>
+					</body>
+
+					<body name="leftclaw" pos="0 .01 0">
+						<geom name="leftclaw_it" class="1" type="capsule" fromto="0 0 0.01 .015 .01 0.01" 	size="0.006" />
+						<geom name="leftclaw_ot" class="1" type="capsule" fromto=".015 .01 0.01 .035 0 0.01" size="0.006" />
+						<geom name="leftclaw_ib" class="1" type="capsule" fromto="0 0 -0.01 .015 .01 -0.01" 	size="0.006" />
+						<geom name="leftclaw_ob" class="1" type="capsule" fromto=".015 .01 -0.01 .035 0 -0.01" size="0.006" />
+						<joint name="lc_close" type="hinge" pos="0 0 0" axis="0 0 1" range="-40 41"/>
+					</body>
+				</body>
+
+			</body>
+		</body>
+
+		<body name="wall" pos="0 0 -.2">>
+			<geom contype="1" conaffinity="1" name="wall" pos="0 0 0" rgba="0.2 0.9 0.2 1" size=".01 .2 .1" type="box"/>
+		</body>
+		<!-- Target -->
+		<body name="target" pos="0 0 -.02">
+			<joint armature="0" axis="1 0 0" damping="0" limited="true" name="target_x" pos="0 0 0" range="-.27 .27" ref=".1" stiffness="0" type="slide"/>
+			<joint armature="0" axis="0 1 0" damping="0" limited="true" name="target_y" pos="0 0 0" range="-.27 .27" ref="-.1" stiffness="0" type="slide"/>
+			<joint armature="0" axis="0 0 1" damping="0" limited="false" name="target_z" pos="0 0 0" ref="-.1" stiffness="0" type="slide"/>
+			<!--<geom contype="1" conaffinity="1" name="target" pos="0 0 -.2" rgba="0.9 0.2 0.2 1" size=".01" type="sphere"/>-->
+			<geom contype="1" conaffinity="1" name="target" pos="0 -.1 -.2" rgba="0.9 0.2 0.2 1" size=".012 .012 .012" type="box"/>
+		</body>
+
+	</worldbody>
+    <equality>
+        <joint name="hand_coupling" active="true" joint1="rc_close" joint2="lc_close" polycoef="0 -1 0 0 0"/>
+    </equality>
+	<actuator>
+        <!--<motor gear="200.0" joint="joint5"/>-->
+		<motor gear="200.0" joint="joint1"/>
+        <motor gear="200.0" joint="joint2"/>
+		<motor gear="200.0" joint="joint3"/>
+        <motor gear="200.0" joint="joint4"/>
+		<motor joint='rc_close' 	name='Arc_close' 	gear="100"/>
+
+        <!--<position joint='joint1' 	name='As_abduction' kp="100" />-->
+		<!--<position joint='joint2' 	name='As_flexion' 	kp="100" />-->
+		<!--<position joint='joint3' 	name='As_rotation' 	kp="100" />-->
+		<!--<position joint='joint4' 	name='Ae_flexion' 	kp="100"  />-->
+        <!--<position joint='rc_close' 		name='Arc_close' 	kp="10"  />-->
+	</actuator>
+</mujoco>

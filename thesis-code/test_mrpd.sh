@@ -1,0 +1,5 @@
+python TRPO_MRPD.py --scope reacher3d_mrpd_6  --n_trajs 100 --checkpoint_freq 100 --env_name Reacher3d-v0 --is_train True --is_load Tru --is_monitor False --n_processes 1 &
+python TRPO_MRPD.py --scope reacher3d_mrpd_7  --n_trajs 100 --checkpoint_freq 100 --env_name Reacher3d-v0 --is_train True --is_load Tru --is_monitor False --n_processes 1 &
+python TRPO_MRPD.py --scope reacher3d_mrpd_8  --n_trajs 100 --checkpoint_freq 100 --env_name Reacher3d-v0 --is_train True --is_load Tru --is_monitor False --n_processes 1 &
+python TRPO_MRPD.py --scope reacher3d_mrpd_9  --n_trajs 100 --checkpoint_freq 100 --env_name Reacher3d-v0 --is_train True --is_load Tru --is_monitor False --n_processes 1 &
+python TRPO_MRPD.py --scope reacher3d_mrpd_10  --n_trajs 100 --checkpoint_freq 100 --env_name Reacher3d-v0 --is_train True --is_load Tru --is_monitor False --n_processes 1
